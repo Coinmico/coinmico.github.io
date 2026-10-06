@@ -62,13 +62,19 @@ a.card:hover{border-color:#4a5058;text-decoration:none}
 .split{display:grid;grid-template-columns:1fr 1.25fr;gap:56px;align-items:center}
 .split.rev{grid-template-columns:1.25fr 1fr}
 .split.rev .txt{order:2}
-.shot{border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.frame img{display:block;width:100%;height:auto}
+.frame.sm{margin:0;max-width:none;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.frame.sm .bar{height:30px}
+.frame.sm .bar i{width:8px;height:8px}
+.hero-m{display:none}
 ul.check{list-style:none;padding:0;margin:20px 0 28px}
 ul.check li{position:relative;padding-left:28px;margin:10px 0;color:var(--soft)}
 ul.check li:before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:inset 0 0 0 4px #1f4d3a}
-.phones{display:flex;gap:18px;justify-content:center}
-.phones img{width:200px;border-radius:22px;border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.45)}
-.phones img:nth-child(2){transform:translateY(-24px)}
+.phones{display:flex;gap:18px;justify-content:center;align-items:flex-start;padding-top:24px}
+.phone{flex:0 1 200px;background:#0b0c0e;border:1px solid #3a3f45;border-radius:30px;padding:7px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.phone img{display:block;width:100%;height:auto;border-radius:23px}
+.phone:nth-child(2){transform:translateY(-24px)}
+.hero-m .phone{flex:none;width:250px;margin:40px auto 0}
 .band{background:linear-gradient(120deg,#16c784,#0f9d68);color:#07130e;border-radius:18px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .band h2{margin:0 0 6px}
 .band p{margin:0;font-size:17px;max-width:620px}
@@ -122,8 +128,13 @@ footer.site{border-top:1px solid var(--line);padding:56px 0 32px;color:var(--mut
  header.top .wrap{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:10px;row-gap:8px}
  nav.main{order:3;flex-basis:100%;overflow-x:auto;gap:18px;padding-bottom:2px}
  .grid,.grid.four,.grid.two{grid-template-columns:1fr}
- .phones img{width:31%}
- .phones img:nth-child(2){transform:none}
+ .phones{justify-content:flex-start;gap:14px;padding:0 18px 8px;margin:0 -18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+ .phone{flex:0 0 64%;scroll-snap-align:center}
+ .phone:nth-child(2){transform:none}
+ .hero-d{display:none}
+ .hero-m{display:block}
+ .hero-m .phone{border-radius:30px;padding:7px}
+ .hero-m .phone img{border-radius:23px}
  .band{padding:32px}
  .fcols{grid-template-columns:1fr 1fr}
  .stat b{font-size:28px}
