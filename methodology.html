@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology – How Coinmico Measures the Crypto Market</title>
+<meta name="description" content="How Coinmico computes crypto prices, volume and rankings: data sources, the reference price, market integrity tests, volume rules and limits.">
+<link rel="canonical" href="https://coinmico.github.io/methodology.html">
+<meta name="theme-color" content="#151719">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Coinmico">
+<meta property="og:url" content="https://coinmico.github.io/methodology.html">
+<meta property="og:title" content="Methodology – How Coinmico Measures the Crypto Market">
+<meta property="og:description" content="How Coinmico computes crypto prices, volume and rankings: data sources, the reference price, market integrity tests, volume rules and limits.">
+<meta property="og:image" content="https://coinmico.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@coinmicoHQ">
+<meta name="twitter:image" content="https://coinmico.github.io/assets/og.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://coinmico.com/#organization", "name": "Coinmico", "url": "https://coinmico.com", "logo": "https://coinmico.com/brand/icon-512.png", "description": "Independent crypto market data and analytics platform measuring prices, volume and liquidity across centralised exchanges and on-chain markets.", "email": "hello@coinmico.com", "sameAs": ["https://x.com/coinmicoHQ", "https://t.me/coinmico", "https://www.facebook.com/coinmico", "https://www.instagram.com/coinmico", "https://www.linkedin.com/in/coinmico-hq", "https://www.crunchbase.com/organization/coinmico", "https://play.google.com/store/apps/details?id=com.coinmico.app", "https://coinmico.github.io/"], "contactPoint": [{"@type": "ContactPoint", "contactType": "customer support", "email": "support@coinmico.com", "availableLanguage": ["en"]}, {"@type": "ContactPoint", "contactType": "press", "email": "hello@coinmico.com", "availableLanguage": ["en"]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="Coinmico home"><img src="assets/lockup-dark.png" alt="Coinmico" width="107" height="30"></a>
+    <nav class="main" aria-label="Main"><a href="products.html">Products</a><a href="methodology.html" aria-current="page">Methodology</a><a href="about.html">About</a><a href="press.html">Press</a><a href="contact.html">Contact</a></nav>
+    <a class="btn" href="https://coinmico.com">Open Coinmico</a>
+  </div>
+</header>
+<main id="main">
+
+<section class="hero left">
+  <div class="wrap">
+    <p class="eyebrow">Methodology</p>
+    <h1>How Coinmico measures the market.</h1>
+    <p class="lead">A summary of the sources, rules, exclusions and limits behind every price, volume and ranking on coinmico.com. The full, always-current version lives on <a href="https://coinmico.com/methodology">coinmico.com/methodology</a>.</p>
+  </div>
+</section>
+<section style="padding-top:16px">
+  <div class="wrap prose">
+    <h2>1. Sources</h2>
+    <ul>
+      <li><b>Centralised exchanges.</b> Live trade tapes from the venues we connect to, including Binance, Coinbase, Kraken, OKX, Bybit, KuCoin, Gate.io, Bitget, MEXC, HTX, Upbit, Bithumb, Bitfinex, Bitstamp and others. Every trade is timestamped and stored by us.</li>
+      <li><b>Derivatives.</b> The contract side of the same venues plus Hyperliquid, kept in separate buckets from spot.</li>
+      <li><b>On-chain swaps.</b> Swap events decoded straight from pool contracts: Uniswap v2/v3/v4, PancakeSwap, Aerodrome, SushiSwap and Solidly forks on EVM chains, plus Raydium, Orca, Meteora and PumpSwap on Solana.</li>
+      <li><b>Order books.</b> Top-of-book quotes for every listed market and rotating depth samples on the deepest markets.</li>
+      <li><b>Supply.</b> Token supply and burn-address balances read over JSON-RPC on the chains we run a client for.</li>
+      <li><b>Metadata and fallback.</b> Descriptions, links, logos and reported supply are ingested from public sources. If our own pipeline is interrupted, the affected view is labelled as fallback data.</li>
+    </ul>
+
+    <h2>2. The reference price</h2>
+    <ul>
+      <li>Trades are bucketed per venue over a rolling one-minute window, and the index settles every two seconds.</li>
+      <li>Each venue contributes one volume-weighted average price. A perpetual carries a quarter of a spot market's weight.</li>
+      <li>The cross-venue median is taken from spot buckets; venues more than 2% away are dropped as outliers.</li>
+      <li>Surviving venues are weighted by traded notional, so the deepest markets dominate.</li>
+      <li>Each price carries a venue count and a confidence value. A price without fresh trades for a minute is marked stale.</li>
+    </ul>
+
+    <h2>3. Market integrity</h2>
+    <p>Every market is re-measured against its asset's index price every ten minutes over a seven-day window. Three tests apply:</p>
+    <ul>
+      <li><b>Price deviation.</b> A market more than 30% from where its asset's other markets agree is excluded from candles, volume and extremes.</li>
+      <li><b>Tokenised equities.</b> Tokenised shares, ETFs and ETPs are kept out of crypto volume, rankings and the index. Tokenised gold, treasuries and credit stay in.</li>
+      <li><b>Token identity.</b> A level more than six times above or below the asset's listing price is treated as another token's price.</li>
+    </ul>
+    <p>Excluded markets are never deleted. They stay on the venue page with the reason recorded.</p>
+
+    <h2>4. Volume</h2>
+    <p>Volume is traded value we observed, not a figure a venue reports. A coin's 24-hour volume is spot turnover from dollar-quoted books plus decoded on-chain swaps. Perpetuals and futures are reported separately and never added to spot volume.</p>
+
+    <h2>5. Limits</h2>
+    <p>We can only measure the venues we connect to, so our market-wide totals can sit below aggregators that publish what exchanges report about themselves. We would rather publish a smaller number that traces back to observed trades.</p>
+
+    <p style="margin-top:40px"><a class="btn" href="https://coinmico.com/methodology">Read the full methodology</a></p>
+  </div>
+</section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <a class="logo" href="./"><img src="assets/lockup-dark.png" alt="Coinmico" width="107" height="30"></a>
+        <p style="margin:14px 0 0;max-width:300px">Independent crypto market data and analytics, measured from the exchanges and blockchains we index ourselves.</p>
+      </div>
+      <div><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="methodology.html">Methodology</a></li><li><a href="press.html">Press &amp; brand</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><h4>Markets</h4><ul><li><a href="https://coinmico.com/">Crypto prices</a></li><li><a href="https://coinmico.com/exchanges">Exchanges</a></li><li><a href="https://coinmico.com/exchanges/dex">DEX</a></li><li><a href="https://coinmico.com/exchanges/derivatives">Derivatives</a></li><li><a href="https://coinmico.com/liquidations">Liquidations</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="https://coinmico.com/learn">Learn</a></li><li><a href="https://coinmico.com/research">Research</a></li><li><a href="https://coinmico.com/news">News</a></li><li><a href="https://coinmico.com/faq">FAQ</a></li><li><a href="https://play.google.com/store/apps/details?id=com.coinmico.app">Android app</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="https://coinmico.com/terms">Terms</a></li><li><a href="https://coinmico.com/privacy">Privacy</a></li><li><a href="https://coinmico.com/disclaimer">Disclaimer</a></li><li><a href="https://coinmico.com/security">Security</a></li></ul></div>
+    </div>
+    <div class="fbottom">
+      <span>&copy; 2026 Coinmico. All rights reserved. <a href="https://coinmico.com">coinmico.com</a></span>
+      <div class="socials"><a href="https://x.com/coinmicoHQ" rel="me noopener" target="_blank">X (Twitter)</a><a href="https://t.me/coinmico" rel="me noopener" target="_blank">Telegram</a><a href="https://www.facebook.com/coinmico" rel="me noopener" target="_blank">Facebook</a><a href="https://www.instagram.com/coinmico" rel="me noopener" target="_blank">Instagram</a><a href="https://www.linkedin.com/in/coinmico-hq" rel="me noopener" target="_blank">LinkedIn</a><a href="https://www.crunchbase.com/organization/coinmico" rel="me noopener" target="_blank">Crunchbase</a></div>
+    </div>
+    <p class="disc">Coinmico publishes market data for information only. It is not investment advice. Crypto assets are highly volatile and you may lose your entire capital; do your own research before you act.</p>
+  </div>
+</footer>
+</body>
+</html>
